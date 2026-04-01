@@ -1,6 +1,6 @@
 // ─── DATA ───────────────────────────────────────────────────────────────────
 const COLORS = ['#4d9cf6','#34d399','#fbbf24','#a78bfa','#f97316','#ec4899','#06b6d4'];
-const DOMAINS = ['Materials Science','Computational','Chemistry','Biotech','Physics','Electronics','Environmental'];
+const DOMAINS = ['Materials Science','Computational','Chemistry','Biotech','Physics','Electronics','Environmental','Aeronautical','Robotics','AI/ML','Game Theory','Industries'];
 
 const SEED_POSTS = [
   {
@@ -155,16 +155,30 @@ function doAuth() {
   }
 
   saveState();
+  document.getElementById('home').style.display = 'none';
   document.getElementById('auth').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   initApp();
 }
 
+function showAuth(mode) {
+  document.getElementById('home').style.display = 'none';
+  document.getElementById('auth').style.display = 'block';
+  document.getElementById('app').style.display = 'none';
+  if (mode === 'signup') {
+    document.querySelector('.auth-tab[onclick="switchAuth(\'signup\')"]').click();
+  } else {
+    document.querySelector('.auth-tab[onclick="switchAuth(\'login\')"]').click();
+  }
+}
+
 function doSignout() {
   user = null;
   saveState();
-  document.getElementById('auth').style.display = 'block';
+  document.getElementById('home').style.display = 'block';
+  document.getElementById('auth').style.display = 'none';
   document.getElementById('app').style.display = 'none';
+  window.scrollTo(0, 0);
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
@@ -568,4 +582,13 @@ function showToast(msg, type='') {
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
 loadState();
-if (user) { document.getElementById('auth').style.display='none'; document.getElementById('app').style.display='block'; initApp(); }
+if (user) {
+  document.getElementById('home').style.display = 'none';
+  document.getElementById('auth').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  initApp();
+} else {
+  document.getElementById('home').style.display = 'block';
+  document.getElementById('auth').style.display = 'none';
+  document.getElementById('app').style.display = 'none';
+}
