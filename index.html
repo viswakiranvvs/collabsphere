@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRUX — Research Collaboration Network</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="auth">
+  <div class="auth-box">
+    <div class="auth-logo">CR<span>U</span>X</div>
+    <div class="auth-sub">Collaborative Research & University Exchange — where problems find solutions</div>
+    <div class="auth-field">
+      <label>Your Name</label>
+      <input type="text" id="auth-name" placeholder="e.g. Priya Sharma" autocomplete="off"/>
+    </div>
+    <div class="auth-field">
+      <label>Institution</label>
+      <input type="text" id="auth-inst" placeholder="e.g. IIT Hyderabad" autocomplete="off"/>
+    </div>
+    <div class="auth-field">
+      <label>I am a</label>
+      <div class="role-grid">
+        <div class="role-btn active" data-role="Student"><span class="emoji">🎓</span><span class="label">Student</span></div>
+        <div class="role-btn" data-role="Professor"><span class="emoji">🔬</span><span class="label">Professor</span></div>
+        <div class="role-btn" data-role="Industry"><span class="emoji">🏭</span><span class="label">Industry</span></div>
+      </div>
+    </div>
+    <button class="auth-submit" onclick="doLogin()">Enter CRUX →</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">CR<span>U</span>X<small>Research Network</small></div>
+    <nav class="nav">
+      <div class="nav-item active" onclick="showFeed()" id="nav-feed">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Discover
+      </div>
+      <div class="nav-item" onclick="showFeed('my')" id="nav-my">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12h6M9 16h6M9 8h6M5 4h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z"/></svg>
+        My Problems
+      </div>
+      <div class="nav-item" onclick="showFeed('saved')" id="nav-saved">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+        Saved
+      </div>
+      <div class="nav-divider"></div>
+      <div class="nav-item" onclick="filterDomain('Materials Science')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+        Materials Sci
+      </div>
+      <div class="nav-item" onclick="filterDomain('Computational')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        Computational
+      </div>
+      <div class="nav-item" onclick="filterDomain('Chemistry')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6v8l3.5 6H5.5L9 11V3z"/><path d="M6 17h12"/></svg>
+        Chemistry
+      </div>
+      <div class="nav-item" onclick="filterDomain('Biotech')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22V12M12 12C12 6 6 2 6 2s0 10 6 10zM12 12c0-6 6-10 6-10s0 10-6 10z"/></svg>
+        Biotech
+      </div>
+    </nav>
+    <div class="user-card" onclick="showProfile(null)" id="sidebar-user">
+      <div class="avatar" id="sidebar-avatar"></div>
+      <div class="user-info">
+        <div class="user-name" id="sidebar-name">—</div>
+        <div class="user-role-badge" id="sidebar-role-badge">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="top-bar">
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><circle cx="8" cy="8" r="6"/><path d="M14 14l4 4"/></svg>
+        <input type="text" placeholder="Search problems, domains, keywords…" id="search-input" oninput="doSearch()"/>
+      </div>
+      <div class="top-actions">
+        <button class="btn-new" onclick="openModal()">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M10 4v12M4 10h12"/></svg>
+          Post Problem
+        </button>
+      </div>
+    </div>
+
+    <!-- Feed -->
+    <div id="feed-view">
+      <div class="feed">
+        <div class="feed-header">
+          <span class="feed-title" id="feed-label">All Problems</span>
+          <div class="filter-tabs">
+            <div class="filter-tab active" onclick="setSort('latest',this)">Latest</div>
+            <div class="filter-tab" onclick="setSort('votes',this)">Most Votes</div>
+            <div class="filter-tab" onclick="setSort('unsolved',this)">Unsolved</div>
+            <div class="filter-tab" onclick="setSort('solved',this)">Solved</div>
+          </div>
+        </div>
+        <div id="cards-container"></div>
+      </div>
+    </div>
+
+    <!-- Detail -->
+    <div id="detail"></div>
+
+    <!-- Profile -->
+    <div id="profile"></div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="right-panel">
+    <div class="panel-section">
+      <div class="panel-title">Platform Stats</div>
+      <div class="stats-grid">
+        <div class="stat-box"><div class="num" id="stat-total">—</div><div class="lbl">Problems</div></div>
+        <div class="stat-box"><div class="num" id="stat-solved">—</div><div class="lbl">Solved</div></div>
+        <div class="stat-box"><div class="num" id="stat-users">—</div><div class="lbl">Researchers</div></div>
+        <div class="stat-box"><div class="num" id="stat-comments">—</div><div class="lbl">Comments</div></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-title">Domains</div>
+      <div id="domain-pills"></div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-title">Top Contributors</div>
+      <div id="contributors"></div>
+    </div>
+  </div>
+</div>
+
+<!-- POST MODAL -->
+<div class="overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-title">Post a Research Problem</div>
+    <div class="field">
+      <label>Problem Title</label>
+      <input type="text" id="m-title" placeholder="Be specific and concise…"/>
+    </div>
+    <div class="field">
+      <label>Description</label>
+      <textarea id="m-desc" placeholder="Describe your problem in detail. Include what you've already tried, parameters, conditions, observations…"></textarea>
+    </div>
+    <div class="field">
+      <label>Domain</label>
+      <select id="m-domain">
+        <option value="Materials Science">Materials Science</option>
+        <option value="Computational">Computational / DFT</option>
+        <option value="Chemistry">Chemistry</option>
+        <option value="Biotech">Biotech / Biology</option>
+        <option value="Physics">Physics</option>
+        <option value="Electronics">Electronics / Devices</option>
+        <option value="Environmental">Environmental</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Keywords / Tags</label>
+      <div class="tags-input" id="tags-input" onclick="document.getElementById('tag-input').focus()">
+        <input type="text" id="tag-input" placeholder="Type and press Enter…" onkeydown="addTag(event)"/>
+      </div>
+    </div>
+    <div class="field">
+      <label>Visibility</label>
+      <div class="vis-grid">
+        <div class="vis-option selected" data-vis="public" onclick="selectVis(this)">
+          <div class="v-title">🌍 Public</div>
+          <div class="v-desc">Everyone can see and comment</div>
+        </div>
+        <div class="vis-option" data-vis="profs" onclick="selectVis(this)">
+          <div class="v-title">🔬 Professors Only</div>
+          <div class="v-desc">Only faculty & industry</div>
+        </div>
+        <div class="vis-option" data-vis="students" onclick="selectVis(this)">
+          <div class="v-title">🎓 Students Only</div>
+          <div class="v-desc">Only student researchers</div>
+        </div>
+        <div class="vis-option" data-vis="private" onclick="selectVis(this)">
+          <div class="v-title">🔒 Private</div>
+          <div class="v-desc">Only you and collaborators</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-submit" onclick="submitProblem()">Post Problem →</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
