@@ -79,6 +79,7 @@ const CONTRIBUTORS = [
 
 // ─── STATE ───────────────────────────────────────────────────────────────────
 let user = null;
+let users = {}; // email -> {password, name, inst, role, color}
 let posts = [];
 let tags = [];
 let currentVis = 'public';
@@ -93,6 +94,7 @@ function loadState() {
   if (saved) {
     const s = JSON.parse(saved);
     user = s.user;
+    users = s.users || {};
     posts = s.posts || SEED_POSTS;
     savedIds = new Set(s.savedIds || []);
     votedIds = new Set(s.votedIds || []);
@@ -102,7 +104,7 @@ function loadState() {
 }
 
 function saveState() {
-  localStorage.setItem('crux_state', JSON.stringify({user, posts, savedIds:[...savedIds], votedIds:[...votedIds]}));
+  localStorage.setItem('crux_state', JSON.stringify({user, users, posts, savedIds:[...savedIds], votedIds:[...votedIds]}));
 }
 
 // ─── AUTH ─────────────────────────────────────────────────────────────────────
@@ -110,16 +112,59 @@ document.querySelectorAll('.role-btn').forEach(b => {
   b.onclick = () => { document.querySelectorAll('.role-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); };
 });
 
-function doLogin() {
-  const name = document.getElementById('auth-name').value.trim();
-  const inst = document.getElementById('auth-inst').value.trim();
-  const role = document.querySelector('.role-btn.active')?.dataset.role || 'Student';
-  if (!name) { document.getElementById('auth-name').focus(); return; }
-  user = { name, inst: inst||'Independent Researcher', role, color: COLORS[Math.floor(Math.random()*COLORS.length)] };
+function switchAuth(mode) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.auth-tab[onclick="switchAuth('${mode}')"]`).classList.add('active');
+  const signupFields = document.getElementById('signup-fields');
+  const submitBtn = document.querySelector('.auth-submit');
+  if (mode === 'signup') {
+    signupFields.style.display = 'block';
+    submitBtn.textContent = 'Sign Up →';
+  } else {
+    signupFields.style.display = 'none';
+    submitBtn.textContent = 'Login →';
+  }
+}
+
+function doAuth() {
+  const email = document.getElementById('auth-email').value.trim().toLowerCase();
+  const password = document.getElementById('auth-password').value;
+  const mode = document.querySelector('.auth-tab.active').textContent.toLowerCase().replace(' ', '');
+
+  if (!email || !password) {
+    alert('Email and password are required.');
+    return;
+  }
+
+  if (mode === 'signup') {
+    const name = document.getElementById('auth-name').value.trim();
+    const inst = document.getElementById('auth-inst').value.trim();
+    const role = document.querySelector('.role-btn.active')?.dataset.role || 'Student';
+    if (!name) {
+      alert('Name is required for signup.');
+      return;
+    }
+    users[email] = { password, name, inst: inst || 'Independent Researcher', role, color: COLORS[Math.floor(Math.random()*COLORS.length)] };
+    user = { email, ...users[email] };
+  } else {
+    // Mock login: allow any email/password, create user if not exists
+    if (!users[email]) {
+      users[email] = { password, name: 'User', inst: 'Independent Researcher', role: 'Student', color: COLORS[Math.floor(Math.random()*COLORS.length)] };
+    }
+    user = { email, ...users[email] };
+  }
+
   saveState();
   document.getElementById('auth').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   initApp();
+}
+
+function doSignout() {
+  user = null;
+  saveState();
+  document.getElementById('auth').style.display = 'block';
+  document.getElementById('app').style.display = 'none';
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
@@ -194,6 +239,7 @@ function showFeed(filter='all') {
   document.getElementById('feed-view').style.display='block';
   document.getElementById('detail').style.display='none';
   document.getElementById('profile').style.display='none';
+  document.getElementById('about-view').style.display='none';
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   if(filter==='all') document.getElementById('nav-feed').classList.add('active');
   else if(filter==='my') document.getElementById('nav-my').classList.add('active');
@@ -212,6 +258,15 @@ function filterDomain(domain) {
   document.getElementById('feed-label').textContent = domain;
   document.getElementById('search-input').value='';
   renderFeed();
+}
+
+function showAbout() {
+  document.getElementById('feed-view').style.display='none';
+  document.getElementById('detail').style.display='none';
+  document.getElementById('profile').style.display='none';
+  document.getElementById('about-view').style.display='block';
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  // No active nav for about
 }
 
 function setSort(s, el) {
@@ -423,6 +478,7 @@ function showProfile(e, nameOverride) {
   document.getElementById('detail').style.display='none';
   const el = document.getElementById('profile');
   el.style.display='block';
+  document.getElementById('about-view').style.display='none';
   el.innerHTML = `
     <div class="back-btn" onclick="showFeed()">
       <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M15 10H5M9 14l-4-4 4-4"/></svg>

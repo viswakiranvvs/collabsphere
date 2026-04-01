@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CRUX — Research Collaboration Network</title>
+<title>CollabSphere — Research Collaboration Network</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
@@ -13,25 +13,40 @@
 <!-- AUTH -->
 <div id="auth">
   <div class="auth-box">
-    <div class="auth-logo">CR<span>U</span>X</div>
+    <div class="auth-logo">CollabSphere</div>
     <div class="auth-sub">Collaborative Research & University Exchange — where problems find solutions</div>
-    <div class="auth-field">
-      <label>Your Name</label>
-      <input type="text" id="auth-name" placeholder="e.g. Priya Sharma" autocomplete="off"/>
+    <div class="auth-about-link"><a href="about.html" target="_blank">About CollabSphere</a></div>
+    <div class="auth-tabs">
+      <div class="auth-tab active" onclick="switchAuth('login')">Login</div>
+      <div class="auth-tab" onclick="switchAuth('signup')">Sign Up</div>
     </div>
     <div class="auth-field">
-      <label>Institution</label>
-      <input type="text" id="auth-inst" placeholder="e.g. IIT Hyderabad" autocomplete="off"/>
+      <label>Email</label>
+      <input type="email" id="auth-email" placeholder="your.email@university.edu" autocomplete="email" required/>
     </div>
     <div class="auth-field">
-      <label>I am a</label>
-      <div class="role-grid">
-        <div class="role-btn active" data-role="Student"><span class="emoji">🎓</span><span class="label">Student</span></div>
-        <div class="role-btn" data-role="Professor"><span class="emoji">🔬</span><span class="label">Professor</span></div>
-        <div class="role-btn" data-role="Industry"><span class="emoji">🏭</span><span class="label">Industry</span></div>
+      <label>Password</label>
+      <input type="password" id="auth-password" placeholder="Enter password" autocomplete="current-password" required/>
+    </div>
+    <div id="signup-fields" style="display:none;">
+      <div class="auth-field">
+        <label>Your Name</label>
+        <input type="text" id="auth-name" placeholder="e.g. Priya Sharma" autocomplete="name"/>
+      </div>
+      <div class="auth-field">
+        <label>Institution</label>
+        <input type="text" id="auth-inst" placeholder="e.g. IIT Hyderabad" autocomplete="organization"/>
+      </div>
+      <div class="auth-field">
+        <label>I am a</label>
+        <div class="role-grid">
+          <div class="role-btn active" data-role="Student"><span class="emoji">🎓</span><span class="label">Student</span></div>
+          <div class="role-btn" data-role="Professor"><span class="emoji">🔬</span><span class="label">Professor</span></div>
+          <div class="role-btn" data-role="Industry"><span class="emoji">🏭</span><span class="label">Industry</span></div>
+        </div>
       </div>
     </div>
-    <button class="auth-submit" onclick="doLogin()">Enter CRUX →</button>
+    <button class="auth-submit" onclick="doAuth()">Enter CollabSphere →</button>
   </div>
 </div>
 
@@ -39,7 +54,7 @@
 <div id="app">
   <!-- Sidebar -->
   <div class="sidebar">
-    <div class="logo">CR<span>U</span>X<small>Research Network</small></div>
+    <div class="logo">CollabSphere<small>Research Network</small></div>
     <nav class="nav">
       <div class="nav-item active" onclick="showFeed()" id="nav-feed">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
@@ -70,6 +85,11 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22V12M12 12C12 6 6 2 6 2s0 10 6 10zM12 12c0-6 6-10 6-10s0 10-6 10z"/></svg>
         Biotech
       </div>
+      <div class="nav-divider"></div>
+      <div class="nav-item" onclick="showAbout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+        About
+      </div>
     </nav>
     <div class="user-card" onclick="showProfile(null)" id="sidebar-user">
       <div class="avatar" id="sidebar-avatar"></div>
@@ -78,6 +98,7 @@
         <div class="user-role-badge" id="sidebar-role-badge">—</div>
       </div>
     </div>
+    <div class="signout-btn" onclick="doSignout()">Sign Out</div>
   </div>
 
   <!-- Main -->
@@ -116,6 +137,25 @@
 
     <!-- Profile -->
     <div id="profile"></div>
+
+    <!-- About -->
+    <div id="about-view" style="display:none;">
+      <div class="about-content">
+        <h1>About CRUX</h1>
+        <p>CRUX (Collaborative Research & University Exchange) is a dedicated platform for researchers, students, professors, and industry professionals to connect, share challenges, and find solutions in scientific research.</p>
+        <p>Our mission is to accelerate scientific discovery by fostering collaboration across disciplines and institutions. Whether you're stuck on a computational problem, seeking advice on experimental techniques, or looking for collaborators on groundbreaking research, CRUX provides the community and tools you need.</p>
+        <h2>Key Features</h2>
+        <ul>
+          <li><strong>Problem Sharing:</strong> Post research challenges and get expert advice from the global scientific community.</li>
+          <li><strong>Cross-Disciplinary Collaboration:</strong> Connect with researchers from materials science, chemistry, biotech, computational fields, and more.</li>
+          <li><strong>Knowledge Exchange:</strong> Learn from detailed discussions, shared methodologies, and practical solutions.</li>
+          <li><strong>Visibility Controls:</strong> Choose who can see your posts - from public discussions to private collaborations.</li>
+        </ul>
+        <h2>Domains Supported</h2>
+        <p>We support research across multiple domains including Materials Science, Computational/DFT, Chemistry, Biotech/Biology, Physics, Electronics, Environmental Science, and more.</p>
+        <p>Join CRUX today and be part of the collaborative research revolution!</p>
+      </div>
+    </div>
   </div>
 
   <!-- Right Panel -->

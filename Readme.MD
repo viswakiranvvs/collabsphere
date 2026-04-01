@@ -1,0 +1,59 @@
+# CollabSphere — Research Collaboration Network
+
+CollabSphere is a web platform designed to connect researchers, students, professors, and industry professionals to share research challenges, seek solutions, and foster collaboration across scientific disciplines.
+
+## Features
+
+- **Problem Sharing**: Post research problems and get expert advice from the global scientific community
+- **Cross-Disciplinary Collaboration**: Connect with researchers in materials science, chemistry, biotech, computational fields, and more
+- **User Authentication**: Secure login and signup with email and password
+- **Visibility Controls**: Choose post visibility (public, professors only, students only, private)
+- **Voting and Comments**: Engage with community through voting and detailed discussions
+- **Domain Filtering**: Browse problems by specific research domains
+- **Saved Problems**: Bookmark interesting problems for later reference
+
+## Supported Domains
+
+- Materials Science
+- Computational / DFT
+- Chemistry
+- Biotech / Biology
+- Physics
+- Electronics / Devices
+- Environmental Science
+- Other
+
+## Getting Started
+
+1. Clone the repository
+2. Open `index.html` in a modern web browser
+3. Sign up with your email and password
+4. Start exploring or posting research problems
+
+## Technologies Used
+
+- HTML5
+- CSS3 (with custom properties)
+- JavaScript ES6+
+- Google Fonts (Syne, DM Sans, JetBrains Mono)
+
+## Project Structure
+
+```
+/
+├── index.html          # Main application file
+├── about.html          # About page
+├── css/
+│   └── styles.css      # Application styles
+├── js/
+│   └── script.js       # Application logic
+└── Readme.MD           # This file
+```
+
+## Contributing
+
+This is a demonstration project for showcasing web development skills. For educational purposes only.
+
+## License
+
+MIT License
