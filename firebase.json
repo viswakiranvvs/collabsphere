@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "collabshare",
+    "site": "collabspheres",
     "public": "public",
     "ignore": [
       "firebase.json",
